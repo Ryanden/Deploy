@@ -1,0 +1,48 @@
+FROM        ubuntu:17.10
+MAINTAINER  lockstom2@gmail.com
+
+# update, upgrade
+RUN         apt -y update && apt -y dist-upgrade
+
+# zsh, curl, git
+RUN         apt -y install zsh curl git
+RUN         curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash
+RUN         chsh -s /usr/bin/zsh
+
+# pyenv istall
+RUN         curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+# pyenv related package modules
+RUN         apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev \
+                   libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+                   xz-utils tk-dev libffi-dev
+
+# pyenv .zshrc settings
+#pyenv 명령어를 실행하기 위한 명령어 셋팅
+RUN         echo 'export PATH="/root/.pyenv/bin:$PATH"' >> ~/.zshrc
+RUN         echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+RUN         echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.zshrc
+
+
+# install python, apply pyenv settings
+ENV         PATH /root/.pyenv/bin:$PATH
+RUN         eval "$(pyenv init -)"
+RUN         eval "$(pyenv virtualenv-init -)"
+RUN         pyenv install 3.6.5
+
+# install pipenv
+RUN         apt -y install software-properties-common python-software-properties
+RUN         add-apt-repository -y ppa:pypa/ppa
+RUN         apt -y update
+RUN         apt -y install pipenv
+
+ENV         LANG    C.UTF-8
+ENV         LC_ALL  C.UTF-8
+# vim install
+RUN         apt -y install vim
+
+# Copy project fles
+RUN         mkdir /srv/project
+COPY        ./Pipfile   /srv/project
+WORKDIR     /srv/project
+RUN         pipenv install --skip-lock
+
