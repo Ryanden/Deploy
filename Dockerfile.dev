@@ -12,6 +12,7 @@ ENV         DJANGO_SETTINGS_MODULE  config.settings.dev
 # build mode
 ENV         BUILD_MODE  dev
 
+
 # Copy project files
 COPY        .   ${PROJECT_DIR}
 WORKDIR     ${PROJECT_DIR}
