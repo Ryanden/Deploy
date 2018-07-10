@@ -11,3 +11,20 @@ Deploy excercise here
 
 ### Secrets
 
+
+#### ``.secrets/dev.json`
+```json
+{
+  "DATABASES": {
+    "default": {
+      "ENGINE": "django.db.backends.postgresql",
+      "HOST": "test-db.cgrq8bydv59x.ap-northeast-2.rds.amazonaws.com",
+      "PORT": "5432",
+      "USER": "<user>",
+      "PASSWORD": "<password>",
+      "NAME": "ec2_deploy_rds"
+    }
+  }
+}
+
+```

@@ -12,29 +12,23 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import json
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'ok9jmotvo0cvv$l)xiftb7r%nt70mlu&0g197qppco0(+6jo1='
+SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 
-SECRET_KEY_FILE = os.path.join(ROOT_DIR, '.secrets/base.json')
-
-with open(SECRET_KEY_FILE, 'rt') as f:
-    json_dict = json.loads(f.read())
-
-json_key = json_dict.get('SECRET_KEY')
-
-SECRET_KEY = json_key
-
-
-# STATICFILES
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (STATIC_DIR,)
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
+# STATIC
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
+secrets = json.loads(open(os.path.join(SECRETS_DIR, 'base.json')).read())
+SECRET_KEY = secrets['SECRET_KEY']
 
 AUTH_USER_MODEL = 'members.User'
 
@@ -65,7 +59,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],
+        'DIRS': [
+            TEMPLATES_DIR
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,17 +73,6 @@ TEMPLATES = [
         },
     },
 ]
-
-
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-
-
-
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -104,22 +89,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LANGUAGE_CODE = 'ko-kr'
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
-
 
